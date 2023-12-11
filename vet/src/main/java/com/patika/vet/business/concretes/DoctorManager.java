@@ -3,6 +3,7 @@ package com.patika.vet.business.concretes;
 import com.patika.vet.business.abstracts.IDoctorService;
 import com.patika.vet.dao.DoctorRepo;
 import com.patika.vet.entity.Doctor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +11,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class DoctorManager implements IDoctorService {
-    @Autowired
-    private DoctorRepo doctorRepo;
+
+    private final DoctorRepo doctorRepo;
     @Override
     public Doctor findById(Long id) {
         return this.doctorRepo.findById(id).orElseThrow(()->new RuntimeException(id+" id'li doctor bulunamadı !!"));

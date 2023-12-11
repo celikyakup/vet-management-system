@@ -4,6 +4,7 @@ import com.patika.vet.business.abstracts.IAvailableDateService;
 import com.patika.vet.dao.AvailableDateRepo;
 import com.patika.vet.dao.DoctorRepo;
 import com.patika.vet.entity.AvailableDate;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AvailableDateManager implements IAvailableDateService {
 
-    @Autowired
-    private AvailableDateRepo dateRepo;
+    private final AvailableDateRepo dateRepo;
 
     @Override
     public List<AvailableDate> findAll() {

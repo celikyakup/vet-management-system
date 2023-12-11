@@ -4,6 +4,7 @@ import com.patika.vet.business.abstracts.AnimalService;
 import com.patika.vet.dao.AnimalRepo;
 import com.patika.vet.entity.Animal;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +12,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class AnimalManager implements AnimalService {
-    @Autowired
-    private AnimalRepo animalRepo;
+
+    private final AnimalRepo animalRepo;
     @Override
     public Animal getById(Long id) {
         return animalRepo.findById(id).orElseThrow(()->new RuntimeException(id + "id' li Hayvan Bulunamadı !!"));

@@ -14,7 +14,7 @@ import org.mapstruct.ValueMapping;
 @Getter
 @Setter
 public class AppointmentSaveRequest {
-    private Long id;
+
     private String appointmentDate;
     private Doctor doctor;
     private Animal animal;

@@ -11,7 +11,6 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class AnimalSaveRequest {
 
-    private Long id;
     private String name;
     private String species;
     private String breed;

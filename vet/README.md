@@ -14,7 +14,7 @@ veterinary doctors will register,
 
 -will register customers,
 
--will register customers' animals,
+-will register customers animals,
 
 -record the vaccinations applied to animals together with their dates,
 
@@ -39,15 +39,15 @@ API End points
 |     GET     |    v1/customers/{id}     |  Fetch a customer by id  |
 |     GET     | v1/customers/name/{name} | Fetch a customer by name |
 
-| HTTP Method |              EndPoint               |                Description                 |
-|:-----------:|:-----------------------------------:|:------------------------------------------:|
-|    POST     |             v1/vaccines             |           Create a new vaccines            |
-|     GET     |             v1/vaccines             |             Fetch all vaccines             |
-|     PUT     |          v1/vaccines/{id}           |          Update a vaccines by id           |
-|   DELETE    |          v1/vaccines/{id}           |          Delete a vaccines by id           |
-|     GET     |          v1/vaccines/{id}           |           Fetch a vaccines by id           |
-|     GET     |       v1/vaccines/animal/{id}       |       Fetch a vaccines by animal id        |
-|     GET     | v1/vaccines/{start-date}/{end-date} | Fetch a protection finish vaccines by date |
+| HTTP Method |                 EndPoint                 |                Description                 |
+|:-----------:|:----------------------------------------:|:------------------------------------------:|
+|    POST     |               v1/vaccines                |           Create a new vaccines            |
+|     GET     |               v1/vaccines                |             Fetch all vaccines             |
+|     PUT     |             v1/vaccines/{id}             |          Update a vaccines by id           |
+|   DELETE    |             v1/vaccines/{id}             |          Delete a vaccines by id           |
+|     GET     |             v1/vaccines/{id}             |           Fetch a vaccines by id           |
+|     GET     |         v1/vaccines/animal/{id}          |       Fetch a vaccines by animal id        |
+|     GET     | v1/vaccines/date?start-date=?&end-date=? | Fetch a protection finish vaccines by date |
 
 | HTTP Method |        EndPoint        |          Description           |
 |:-----------:|:----------------------:|:------------------------------:|
@@ -74,13 +74,13 @@ API End points
 |   DELETE    |   v1/dates/{id}   | Delete a available date by id |
 |     GET     |   v1/dates/{id}   | Fetch a available date by id  |
 
-| HTTP Method |                        EndPoint                        |                       Description                       |
-|:-----------:|:------------------------------------------------------:|:-------------------------------------------------------:|
-|    POST     |                 v1/appointments/{date}                 |            Create a new appointments by date            |
-|     GET     |                    v1/appointments                     |                 Fetch all appointments                  |
-|     PUT     |                  v1/appointments/{id}                  |               Update a appointments by id               |
-|   DELETE    |                  v1/appointments/{id}                  |               Delete a appointments by id               |
-|     GET     |                  v1/appointments/{id}                  |               Fetch a appointments by id                |
-|     GET     | v1/appointments/animal/{id}/{start-date}/{finish-date} | Fetch a appointments by animal id and two dates between |
-|     GET     | v1/appointments/doctor/{id}/{start-date}/{finish-date} | Fetch a appointments by doctor id and two dates between |
+| HTTP Method |                      EndPoint                       |                       Description                       |
+|:-----------:|:---------------------------------------------------:|:-------------------------------------------------------:|
+|    POST     |               v1/appointments/{date}                |            Create a new appointments by date            |
+|     GET     |                   v1/appointments                   |                 Fetch all appointments                  |
+|     PUT     |                v1/appointments/{id}                 |               Update a appointments by id               |
+|   DELETE    |                v1/appointments/{id}                 |               Delete a appointments by id               |
+|     GET     |                v1/appointments/{id}                 |               Fetch a appointments by id                |
+|     GET     | v1/appointments/animal?id=?&start-date=?&end-date=? | Fetch a appointments by animal id and two dates between |
+|     GET     | v1/appointments/doctor?id=?&start-date=?&end-date=? | Fetch a appointments by doctor id and two dates between |
 

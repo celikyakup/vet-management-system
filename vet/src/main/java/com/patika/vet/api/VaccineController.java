@@ -34,8 +34,8 @@ public class VaccineController {
     public List<Vaccine> getByAnimalId(@PathVariable("id") Long animalId){
         return this.vaccineService.findByAnimalId(animalId);
     }
-    @GetMapping("/{start-date}/{end-date}")
-    public List<Vaccine> getByProtectionDate(@PathVariable("start-date") LocalDate startDate,@PathVariable("end-date")LocalDate endDate){
+    @GetMapping("/date")
+    public List<Vaccine> getByProtectionDate(@RequestParam("start-date") LocalDate startDate,@RequestParam("end-date")LocalDate endDate){
         return this.vaccineService.findByProtectionDate(startDate,endDate);
     }
     @PostMapping()

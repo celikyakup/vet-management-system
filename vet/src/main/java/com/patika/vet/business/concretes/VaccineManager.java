@@ -3,6 +3,8 @@ package com.patika.vet.business.concretes;
 import com.patika.vet.business.abstracts.IVaccineService;
 import com.patika.vet.dao.VaccineRepo;
 import com.patika.vet.entity.Vaccine;
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +13,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class VaccineManager implements IVaccineService {
 
-    @Autowired
-    private VaccineRepo vaccineRepo;
+    private final VaccineRepo vaccineRepo;
     @Override
     public Vaccine getById(Long id) {
         return vaccineRepo.findById(id).orElseThrow(()->new RuntimeException(id + " 'li aşı bulunamadı !!"));
@@ -27,12 +29,17 @@ public class VaccineManager implements IVaccineService {
 
     @Override
     public Vaccine save(Vaccine vaccine) {
-        Optional<Vaccine> isVaccineExist=this.vaccineRepo.findByNameAndCodeAndProtectionStartDateBeforeAndAnimal(vaccine.getName(), vaccine.getCode(),vaccine.getProtectionFinishDate(),vaccine.getAnimal());
+        Optional<Vaccine> isVaccineExist=this.vaccineRepo.findByNameAndCodeAndProtectionFinishDateAfterAndAnimal(vaccine.getName(), vaccine.getCode(),vaccine.getProtectionStartDate(),vaccine.getAnimal());
 
-        if (isVaccineExist.isEmpty()){
-            return this.vaccineRepo.save(vaccine);
+        if (vaccine.getProtectionStartDate().isAfter(vaccine.getProtectionFinishDate())){
+            throw new RuntimeException("Başlangıç tarihi bitiş tarihinden ileride bir tarih olamaz!!");
         }
-        throw new RuntimeException("Bu aşının daha önce kaydı yapılmıştır !!");
+
+        if (isVaccineExist.isPresent()){
+            throw new RuntimeException("Bu aşının daha önce kaydı yapılmıştır !!");
+        }
+
+        return this.vaccineRepo.save(vaccine);
     }
 
     @Override

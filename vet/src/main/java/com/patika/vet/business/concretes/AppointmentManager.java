@@ -13,6 +13,7 @@ import com.patika.vet.entity.Appointment;
 import com.patika.vet.entity.AvailableDate;
 import com.patika.vet.entity.Doctor;
 import com.patika.vet.mapper.AppointmentMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,14 +27,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class AppointmentManager implements IAppointmentService {
-    @Autowired
-    private AppointmentRepo appointmentRepo;
+    private final AppointmentRepo appointmentRepo;
 
-    @Autowired
-    private AvailableDateManager availableDateService;
-    @Autowired
-    private AppointmentMapper appointmentMapper;
+
+    private final AvailableDateManager availableDateService;
+
+    private final AppointmentMapper appointmentMapper;
 
     @Override
     public List<AppointmentResponse> findAll() {
