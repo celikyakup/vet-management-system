@@ -4,6 +4,7 @@ import com.patika.vet.business.abstracts.AnimalService;
 import com.patika.vet.entity.Animal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -41,8 +42,8 @@ public class AnimalController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Animal save(@RequestBody Animal animal){
-        return animalService.save(animal);
+    public ResponseEntity<Animal> save(@RequestBody Animal animal){
+        return new ResponseEntity<>(animalService.save(animal),HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

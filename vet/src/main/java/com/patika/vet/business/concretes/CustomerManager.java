@@ -1,6 +1,8 @@
 package com.patika.vet.business.concretes;
 
 import com.patika.vet.business.abstracts.ICustomerService;
+import com.patika.vet.core.exception.MethodArgumentNotValidException;
+import com.patika.vet.core.exception.NotFoundException;
 import com.patika.vet.dao.CustomerRepo;
 import com.patika.vet.dto.request.CustomerRequest;
 import com.patika.vet.dto.response.CustomerResponse;
@@ -24,7 +26,7 @@ public class CustomerManager implements ICustomerService {
 
     @Override
     public CustomerResponse getById(Long id) {
-        return this.customerMapper.asOutput(this.customerRepo.findById(id).orElseThrow(()->new RuntimeException(id+" id'li Hayvan Sahibi Bulunamadı !")));
+        return this.customerMapper.asOutput(this.customerRepo.findById(id).orElseThrow(()->new NotFoundException(id+" id'li Hayvan Sahibi Bulunamadı !")));
     }
 
     @Override
@@ -36,7 +38,7 @@ public class CustomerManager implements ICustomerService {
         }
         /*Customer customer=this.customerRepo.save(this.customerMapper.asEntity(customerRequest));
         return this.customerMapper.asOutput(customer);*/
-        throw new RuntimeException("Bu hayvan sahibi daha önce sisteme kayıt edilmiş !!");
+        throw new MethodArgumentNotValidException("Bu hayvan sahibi daha önce sisteme kayıt edilmiş !!");
     }
 
     @Override
@@ -44,10 +46,10 @@ public class CustomerManager implements ICustomerService {
         Optional<Customer> customerFromDb=this.customerRepo.findById(id);
         Optional<Customer> isCustomerExist=customerRepo.findByNameAndPhoneAndMail(customerRequest.getName(),customerRequest.getPhone(),customerRequest.getMail());
         if (customerFromDb.isEmpty()){
-            throw new RuntimeException(id +"Güncelleme yapmak istediğiniz hayvan sahibi sistemde kayıtlı değil !");
+            throw new NotFoundException(id +"Güncelleme yapmak istediğiniz hayvan sahibi sistemde kayıtlı değil !");
         }
         if (isCustomerExist.isPresent()){
-            throw new RuntimeException("Bu hayvan sahibi sisteme daha önce kayıt edilmiş !!");
+            throw new MethodArgumentNotValidException("Bu hayvan sahibi sisteme daha önce kayıt edilmiş !!");
         }
 
         Customer customer=customerFromDb.get();
@@ -62,7 +64,7 @@ public class CustomerManager implements ICustomerService {
             this.customerRepo.delete(customerFromDb.get());
             return true;
         }else {
-            throw new RuntimeException(id+" id 'li yazar sistemde kayıtlı değil !!");
+            throw new NotFoundException(id+" id 'li yazar sistemde kayıtlı değil !!");
 
         }
     }

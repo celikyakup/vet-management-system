@@ -1,6 +1,8 @@
 package com.patika.vet.business.concretes;
 
 import com.patika.vet.business.abstracts.IVaccineService;
+import com.patika.vet.core.exception.MethodArgumentNotValidException;
+import com.patika.vet.core.exception.NotFoundException;
 import com.patika.vet.dao.VaccineRepo;
 import com.patika.vet.entity.Vaccine;
 import jakarta.transaction.Transactional;
@@ -19,7 +21,7 @@ public class VaccineManager implements IVaccineService {
     private final VaccineRepo vaccineRepo;
     @Override
     public Vaccine getById(Long id) {
-        return vaccineRepo.findById(id).orElseThrow(()->new RuntimeException(id + " 'li aşı bulunamadı !!"));
+        return vaccineRepo.findById(id).orElseThrow(()->new NotFoundException(id + " 'li aşı bulunamadı !!"));
     }
 
     @Override
@@ -32,11 +34,11 @@ public class VaccineManager implements IVaccineService {
         Optional<Vaccine> isVaccineExist=this.vaccineRepo.findByNameAndCodeAndProtectionFinishDateAfterAndAnimal(vaccine.getName(), vaccine.getCode(),vaccine.getProtectionStartDate(),vaccine.getAnimal());
 
         if (vaccine.getProtectionStartDate().isAfter(vaccine.getProtectionFinishDate())){
-            throw new RuntimeException("Başlangıç tarihi bitiş tarihinden ileride bir tarih olamaz!!");
+            throw new MethodArgumentNotValidException("Başlangıç tarihi bitiş tarihinden ileride bir tarih olamaz!!");
         }
 
         if (isVaccineExist.isPresent()){
-            throw new RuntimeException("Bu aşının daha önce kaydı yapılmıştır !!");
+            throw new MethodArgumentNotValidException("Bu aşının daha önce kaydı yapılmıştır !!");
         }
 
         return this.vaccineRepo.save(vaccine);
@@ -49,7 +51,7 @@ public class VaccineManager implements IVaccineService {
             vaccine.setId(id);
             return this.vaccineRepo.save(vaccine);
         }
-        throw new RuntimeException("Güncelleme yapmak istediğiniz aşı sisteme kayıt edilmemiş !!");
+        throw new MethodArgumentNotValidException("Güncelleme yapmak istediğiniz aşı sisteme kayıt edilmemiş !!");
     }
 
     @Override
@@ -60,7 +62,7 @@ public class VaccineManager implements IVaccineService {
             this.vaccineRepo.delete(vaccineFromDb.get());
             return true;
         }else {
-            throw new RuntimeException(id+" id'li aşı sisteme kayıt edilmemiş !!");
+            throw new NotFoundException(id+" id'li aşı sisteme kayıt edilmemiş !!");
         }
     }
 

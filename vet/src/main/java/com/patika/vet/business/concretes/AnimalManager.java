@@ -1,6 +1,8 @@
 package com.patika.vet.business.concretes;
 
 import com.patika.vet.business.abstracts.AnimalService;
+import com.patika.vet.core.exception.MethodArgumentNotValidException;
+import com.patika.vet.core.exception.NotFoundException;
 import com.patika.vet.dao.AnimalRepo;
 import com.patika.vet.entity.Animal;
 import jakarta.transaction.Transactional;
@@ -18,7 +20,7 @@ public class AnimalManager implements AnimalService {
     private final AnimalRepo animalRepo;
     @Override
     public Animal getById(Long id) {
-        return animalRepo.findById(id).orElseThrow(()->new RuntimeException(id + "id' li Hayvan Bulunamadı !!"));
+        return animalRepo.findById(id).orElseThrow(()->new NotFoundException(id + "id' li Hayvan Bulunamadı !!"));
     }
 
     @Override
@@ -27,14 +29,14 @@ public class AnimalManager implements AnimalService {
         if (isAnimalExist.isEmpty()){
             return this.animalRepo.save(animal);
         }
-        throw new RuntimeException("Bu hayvan daha önce sisteme kayıt edilmiştir !!");
+        throw new MethodArgumentNotValidException("Bu hayvan daha önce sisteme kayıt edilmiştir !!");
     }
 
     @Override
     public Animal update(Long id,Animal animal) {
         Animal isAnimalExistDb=this.getById(id);
         if (isAnimalExistDb==null){
-            throw new RuntimeException(id+ "Güncelleme yaptığınız hayvan sistemde bulunamadı.");
+            throw new NotFoundException(id+ "Güncelleme yaptığınız hayvan sistemde bulunamadı.");
         }
 
         return this.animalRepo.save(animal);
@@ -48,7 +50,7 @@ public class AnimalManager implements AnimalService {
             return true;
         }
         else {
-            throw new RuntimeException(id+ "id'li hayvan sistemde bulunamadığı için silme işlemi yapılamadı !");
+            throw new NotFoundException(id+ "id'li hayvan sistemde bulunamadığı için silme işlemi yapılamadı !");
         }
     }
 

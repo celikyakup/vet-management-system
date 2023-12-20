@@ -1,6 +1,8 @@
 package com.patika.vet.business.concretes;
 
 import com.patika.vet.business.abstracts.IAvailableDateService;
+import com.patika.vet.core.exception.MethodArgumentNotValidException;
+import com.patika.vet.core.exception.NotFoundException;
 import com.patika.vet.dao.AvailableDateRepo;
 import com.patika.vet.dao.DoctorRepo;
 import com.patika.vet.entity.AvailableDate;
@@ -25,7 +27,7 @@ public class AvailableDateManager implements IAvailableDateService {
 
     @Override
     public AvailableDate getById(Long id) {
-        return this.dateRepo.findById(id).orElseThrow(()->new RuntimeException(id+ " id'li bir kayıt sistemde yok !!"));
+        return this.dateRepo.findById(id).orElseThrow(()->new NotFoundException(id+ " id'li bir kayıt sistemde yok !!"));
     }
 
     @Override
@@ -34,14 +36,14 @@ public class AvailableDateManager implements IAvailableDateService {
         if (isDateExist.isEmpty()){
             return this.dateRepo.save(availableDate);
         }
-        throw new RuntimeException("Bu doktora bu tarih daha önce kayıt edilmiş!!");
+        throw new MethodArgumentNotValidException("Bu doktora bu tarih daha önce kayıt edilmiş!!");
     }
 
     @Override
     public AvailableDate update(Long id, AvailableDate availableDate) {
         Optional<AvailableDate> dateFromDb=this.dateRepo.findById(id);
         if (dateFromDb.isEmpty()){
-            throw new RuntimeException("Güncelleme yapmak istediğiniz "+id+" li tarih sistemde kayıtlı değildir !!");
+            throw new NotFoundException("Güncelleme yapmak istediğiniz "+id+" li tarih sistemde kayıtlı değildir !!");
         }
         availableDate.setId(id);
         return this.dateRepo.save(availableDate);
@@ -53,7 +55,7 @@ public class AvailableDateManager implements IAvailableDateService {
         if (dateFromDb.isPresent()){
             this.dateRepo.delete(dateFromDb.get());
         }else {
-            throw new RuntimeException(id+" id'li date sistemde kayıtlı değil!!");
+            throw new NotFoundException(id+" id'li date sistemde kayıtlı değil!!");
         }
     }
     @Override

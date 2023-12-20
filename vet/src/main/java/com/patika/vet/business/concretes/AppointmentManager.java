@@ -3,6 +3,7 @@ package com.patika.vet.business.concretes;
 import com.patika.vet.business.abstracts.IAppointmentService;
 import com.patika.vet.business.abstracts.IAvailableDateService;
 import com.patika.vet.core.Helper;
+import com.patika.vet.core.exception.NotFoundException;
 import com.patika.vet.dao.AppointmentRepo;
 import com.patika.vet.dao.AvailableDateRepo;
 import com.patika.vet.dao.DoctorRepo;
@@ -43,7 +44,7 @@ public class AppointmentManager implements IAppointmentService {
 
     @Override
     public AppointmentResponse findById(Long id) {
-        return this.appointmentMapper.asOutput(appointmentRepo.findById(id).orElseThrow(()->new RuntimeException(id +" id'li randevu sistemde kayıtlı değil !!")));
+        return this.appointmentMapper.asOutput(appointmentRepo.findById(id).orElseThrow(()->new NotFoundException(id +" id'li randevu sistemde kayıtlı değil !!")));
     }
 
     @Override
@@ -63,12 +64,12 @@ public class AppointmentManager implements IAppointmentService {
 
 
         if (isAvailable.isEmpty()){
-            throw new RuntimeException("Doktor bu tarihte çalışmamaktadır !!");
+            throw new NotFoundException("Doktor bu tarihte çalışmamaktadır !!");
         } else if (!date.isEqual(ChronoLocalDate.from(Helper.StringToDate(appointmentSaveRequest.getAppointmentDate())))) {
-            throw new RuntimeException("Randevu tarihiyle doktorun çalışma günü uyuşmuyor!!");
+            throw new NotFoundException("Randevu tarihiyle doktorun çalışma günü uyuşmuyor!!");
 
         } else if (isAppointmenExist.isPresent()){
-            throw new RuntimeException("Girilen saatte bir randevu mevcuttur!!");
+            throw new NotFoundException("Girilen saatte bir randevu mevcuttur!!");
         }
 
         else {
@@ -84,13 +85,13 @@ public class AppointmentManager implements IAppointmentService {
         Optional<Appointment> isAppointmenExist=this.appointmentRepo.findByAppointmentDateAndDoctor(Helper.StringToDate(updateRequest.getAppointmentDate()),updateRequest.getDoctor());
         Optional<Appointment> appointmentFromDb=this.appointmentRepo.findById(id);
         if (appointmentFromDb.isEmpty()){
-            throw new RuntimeException(id+" id'li randevu sistemde bulunamadı.");
+            throw new NotFoundException(id+" id'li randevu sistemde bulunamadı.");
         }
         if (isAvailable.isEmpty()){
-            throw new RuntimeException("Doktor bu tarihte çalışmamaktadır !!");
+            throw new NotFoundException("Doktor bu tarihte çalışmamaktadır !!");
         }
          else if (isAppointmenExist.isPresent()){
-            throw new RuntimeException("Girilen saatte bir randevu mevcuttur!!");
+            throw new NotFoundException("Girilen saatte bir randevu mevcuttur!!");
         }
         Appointment updateAppointment=appointmentFromDb.get();
         this.appointmentMapper.update(updateAppointment,updateRequest);
@@ -102,7 +103,7 @@ public class AppointmentManager implements IAppointmentService {
     public void delete(Long id) {
         Optional<Appointment> appointmentFromDb=this.appointmentRepo.findById(id);
         if (appointmentFromDb.isEmpty()){
-            throw new RuntimeException("Randevu bulunamadığı için silme işlemi yapılamıyor!!");
+            throw new NotFoundException("Randevu bulunamadığı için silme işlemi yapılamıyor!!");
         }
         this.appointmentRepo.delete(appointmentFromDb.get());
     }
